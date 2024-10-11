@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.aduilio.mytasks.databinding.ActivityTaskFormBinding
 import com.aduilio.mytasks.entity.Task
 import com.aduilio.mytasks.service.TaskService
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeParseException
 
 class TaskFormActivity : AppCompatActivity() {
 
@@ -40,14 +43,58 @@ class TaskFormActivity : AppCompatActivity() {
 
     private fun initComponents() {
         binding.btSave.setOnClickListener {
-            val task = Task(title = binding.etTitle.text.toString(), id = taskId)
-            taskService.save(task).observe(this) { responseDto ->
-                if (responseDto.isError) {
-                    Toast.makeText(this, "Erro com o servidor", Toast.LENGTH_SHORT).show()
-                } else {
-                    finish()
+            if (validateForm()) {
+                val task = Task(
+                    title = binding.etTitle.text.toString(),
+                    description = binding.etDescription.text.toString(),
+                    date = LocalDate.parse(binding.etDate.text.toString()),
+                    time = LocalTime.parse(binding.etTime.text.toString()),
+                    id = taskId
+                )
+                taskService.save(task).observe(this) { responseDto ->
+                    if (responseDto.isError) {
+                        Toast.makeText(this, "Erro com o servidor", Toast.LENGTH_SHORT).show()
+                    } else {
+                        finish()
+                    }
                 }
             }
+        }
+    }
+
+    private fun validateForm(): Boolean {
+        if (binding.etTitle.text.isNullOrEmpty()) {
+            Toast.makeText(this, "O título é obrigatório", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (!binding.etDate.text.isNullOrEmpty() && !isValidDate(binding.etDate.text.toString())) {
+            Toast.makeText(this, "Formato de data inválido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (!binding.etTime.text.isNullOrEmpty() && !isValidTime(binding.etTime.text.toString())) {
+            Toast.makeText(this, "Formato de hora inválido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+            return true
+    }
+
+    private fun isValidDate(date: String): Boolean {
+        return try {
+            LocalDate.parse(date)
+            true
+        } catch (e: DateTimeParseException) {
+            false
+        }
+    }
+
+    private fun isValidTime(time: String): Boolean {
+        return try {
+            LocalTime.parse(time)
+            true
+        } catch (e: DateTimeParseException) {
+            false
         }
     }
 
@@ -56,6 +103,9 @@ class TaskFormActivity : AppCompatActivity() {
         (intent.extras?.getSerializable("task") as Task?)?.let { task ->
             taskId = task.id
             binding.etTitle.setText(task.title)
+            binding.etDescription.setText(task.description)
+            binding.etDate.setText(task.date?.toString())
+            binding.etTime.setText(task.time?.toString())
 
             if (task.completed) {
                 binding.btSave.visibility = View.INVISIBLE
