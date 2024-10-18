@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         val helper = NotificationHelper(this)
-//        helper.showNotification("Titulo da notificação 1", "Texto da notificação")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -165,13 +164,26 @@ class MainActivity : AppCompatActivity() {
         ItemTouchHelper(TaskItemTouchCallback(object : TaskItemSwipeListener {
             override fun onSwipe(position: Int) {
                 val task = tasksAdapter.getItem(position)
-                taskService.delete(task).observe(this@MainActivity) { responseDto ->
-                    if (responseDto.isError) {
-                        tasksAdapter.refreshItem(position)
-                    } else {
-                        tasksAdapter.deleteItem(position)
+
+                AlertDialog.Builder(this@MainActivity)
+                    .setTitle("Confirmar exclusão")
+                    .setMessage("Tem certeza de que deseja excluir esta tarefa?")
+                    .setPositiveButton("Sim") { _, _ ->
+                        taskService.delete(task).observe(this@MainActivity) { responseDto ->
+                            if (responseDto.isError) {
+                                tasksAdapter.refreshItem(position)
+                            } else {
+                                tasksAdapter.deleteItem(position)
+                            }
+                        }
                     }
-                }
+                    .setNegativeButton("Não") { _, _ ->
+                        tasksAdapter.refreshItem(position)
+                    }
+                    .setOnCancelListener {
+                        tasksAdapter.refreshItem(position)
+                    }
+                    .show()
             }
         })).attachToRecyclerView(binding.rvTasks)
 
@@ -181,18 +193,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.fabNewTask.setOnClickListener {
             startActivity(Intent(this, TaskFormActivity::class.java))
-
-//            Log.e("thread", "Thread 1: ${Thread.currentThread().name}")
-//
-//            CoroutineScope(Dispatchers.Main).launch {
-//                Log.e("thread", "Thread 2: ${Thread.currentThread().name}")
-//                Thread.sleep(10000)
-//
-//                withContext(Dispatchers.Main) {
-//                    Log.e("thread", "Thread 3: ${Thread.currentThread().name}")
-//                    binding.tvMessage.setText("Finalizou")
-//                }
-//            }
         }
     }
 
