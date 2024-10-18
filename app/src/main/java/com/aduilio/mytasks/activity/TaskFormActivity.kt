@@ -1,6 +1,5 @@
 package com.aduilio.mytasks.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -11,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.aduilio.mytasks.databinding.ActivityTaskFormBinding
 import com.aduilio.mytasks.entity.Task
 import com.aduilio.mytasks.service.TaskService
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -51,6 +52,14 @@ class TaskFormActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
+        binding.etDate.setOnClickListener {
+            showDatePicker()
+        }
+
+        binding.etTime.setOnClickListener {
+            showTimePicker()
+        }
+
         binding.btSave.setOnClickListener {
             if (validateForm()) {
                 val task = Task(
@@ -71,13 +80,39 @@ class TaskFormActivity : AppCompatActivity() {
         }
     }
 
+    private fun showDatePicker() {
+        val now = LocalDate.now()
+        val datePicker = DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+                binding.etDate.setText(selectedDate.toString())
+            },
+            now.year, now.monthValue - 1, now.dayOfMonth
+        )
+        datePicker.show()
+    }
+
+    private fun showTimePicker() {
+        val now = LocalTime.now()
+        val timePicker = TimePickerDialog(
+            this,
+            { _, hour, minute ->
+                val selectedTime = LocalTime.of(hour, minute)
+                binding.etTime.setText(selectedTime.toString())
+            },
+            now.hour, now.minute, true
+        )
+        timePicker.show()
+    }
+
     private fun isValidDate(date: String): Boolean {
         return try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
             LocalDate.parse(date, formatter)
             true
         } catch (e: DateTimeParseException) {
-            true
+            false
         }
     }
 
@@ -87,7 +122,7 @@ class TaskFormActivity : AppCompatActivity() {
             LocalTime.parse(time, formatter)
             true
         } catch (e: DateTimeParseException) {
-            true
+            false
         }
     }
 

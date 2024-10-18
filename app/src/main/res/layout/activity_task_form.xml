@@ -61,7 +61,10 @@
             android:id="@+id/etDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/date" />
+            android:hint="@string/date"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,7 +85,10 @@
             android:id="@+id/etTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/time" />
+            android:hint="@string/time"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
