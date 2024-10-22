@@ -23,7 +23,6 @@ class TasksAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         Log.e("adapter", "Criando um TaskViewHolder")
-
         val binding = TaskListItemBinding.inflate(LayoutInflater.from(context), parent, false)
         return TaskViewHolder(context, binding, listener)
     }
@@ -41,7 +40,6 @@ class TasksAdapter(
     fun setItems(items: List<Task>) {
         tasks.clear()
         tasks.addAll(items)
-
         notifyDataSetChanged()
         checkEmptyTasks()
     }
@@ -57,7 +55,6 @@ class TasksAdapter(
     fun deleteItem(position: Int) {
         tasks.removeAt(position)
         notifyItemRemoved(position)
-
         checkEmptyTasks()
     }
 
