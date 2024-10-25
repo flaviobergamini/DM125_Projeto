@@ -11,4 +11,13 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Visualizar datas por extenso">
+        <SwitchPreferenceCompat
+            android:key="expanded_date"
+            android:summaryOff="04/09/2024"
+            android:summaryOn="04 de setembro de 2024"
+            android:title="@string/expanded_date" />
+    </PreferenceCategory>
+
+
 </PreferenceScreen>

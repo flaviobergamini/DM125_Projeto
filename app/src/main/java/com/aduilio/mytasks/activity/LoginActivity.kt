@@ -25,6 +25,10 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
+
+        setContentView(R.layout.activity_login)
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -93,7 +97,31 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun createAccount() {
-        Firebase.auth.createUserWithEmailAndPassword(binding.etEmail.value(), binding.etPassword.value())
+        val email = binding.etEmail.value().trim()
+        val password = binding.etPassword.value().trim()
+
+        if (email.isEmpty() || password.isEmpty()) {
+
+            if (email.isEmpty()) {
+                binding.tilEmail.error = "Email não pode estar vazio"
+            } else {
+                binding.tilEmail.error = null
+            }
+
+            if (password.isEmpty()) {
+                binding.tilPassword.error = "Senha não pode estar vazia"
+            } else {
+                binding.tilPassword.error = null
+            }
+
+            Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        binding.tilEmail.error = null
+        binding.tilPassword.error = null
+
+        Firebase.auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     login()
@@ -103,4 +131,15 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
+    /*private fun createAccount() {
+        Firebase.auth.createUserWithEmailAndPassword(binding.etEmail.value(), binding.etPassword.value())
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    login()
+                } else {
+                    binding.tilEmail.error = task.exception?.message
+                    Toast.makeText(this, "Falha ao criar conta.", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }*/
 }

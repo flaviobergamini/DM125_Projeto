@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings -> startActivity(Intent(this, PreferenceFragment::class.java))
+            R.id.action_settings -> startActivity(Intent(this, PreferenceActivity::class.java))
             R.id.action_logout -> {
                 Firebase.auth.signOut()
                 startActivity(Intent(this, LoginActivity::class.java))

@@ -14,11 +14,11 @@ class PreferenceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPreferenceBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+            setContentView(binding.root)
 
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.layoutContainer, PreferenceFragment())
-                .commit()
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.layoutContainer, PreferenceFragment())
+                    .commit()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

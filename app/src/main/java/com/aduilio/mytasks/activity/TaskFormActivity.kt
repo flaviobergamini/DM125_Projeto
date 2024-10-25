@@ -12,6 +12,7 @@ import com.aduilio.mytasks.entity.Task
 import com.aduilio.mytasks.service.TaskService
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import com.aduilio.mytasks.R
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -27,6 +28,10 @@ class TaskFormActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()
+
+        setContentView(R.layout.activity_task_form)
+
         binding = ActivityTaskFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

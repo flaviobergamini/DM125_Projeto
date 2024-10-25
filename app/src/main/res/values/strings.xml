@@ -24,5 +24,6 @@
     <string name="new_task_information">Cria uma nova tarefa</string>
     <string name="share">Compartilhar</string>
     <string name="share_using">Compartilhar a tarefa com...</string>
+    <string name="expanded_date">Visualizar datas por extenso</string>
 
 </resources>

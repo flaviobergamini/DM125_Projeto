@@ -2,6 +2,7 @@ package com.aduilio.mytasks.adapter
 
 import android.content.Context
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aduilio.mytasks.R
 import com.aduilio.mytasks.databinding.TaskListItemBinding
@@ -9,6 +10,7 @@ import com.aduilio.mytasks.entity.Task
 import com.aduilio.mytasks.listener.TaskItemClickListener
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class TaskViewHolder(
     private val context: Context,
@@ -17,53 +19,59 @@ class TaskViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun setValues(task: Task) {
-        // Obtendo o formato da data a partir das preferências
-        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val dateFormat = sharedPreferences.getString("date_format", "SHORT") ?: "SHORT"
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val useExpandedFormat = sharedPreferences.getBoolean("expanded_date", false)
 
-        // Definindo título
         binding.tvTitle.text = task.title
 
-        // Exibindo data no formato configurado
         binding.tvDate.text = task.date?.let { date ->
-            val formatter = if (dateFormat == "LONG") {
-                DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy")
+            if (useExpandedFormat) {
+                date.format(DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", Locale("pt", "BR")))
             } else {
-                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
             }
-            date.format(formatter)
-        } ?: "-"
-
-        // Exibindo hora
-        binding.tvTime.text = task.time?.format(DateTimeFormatter.ofPattern("HH:mm")) ?: "-"
-
-        // Alterando cor do card com base na data da tarefa
-        val currentDate = LocalDate.now()
-        val taskDate = task.date
-
-        val cardColor = when {
-            taskDate == null || taskDate.isAfter(currentDate) -> R.color.blue_700 // No prazo
-            taskDate.isBefore(currentDate.minusDays(1)) -> R.color.red_500 // Vencida
-            taskDate.isEqual(currentDate) -> R.color.yellow_500 // Vence hoje
-            else -> R.color.blue_700
+        } ?: run {
+            "-"
         }
-        binding.root.setCardBackgroundColor(ContextCompat.getColor(context, cardColor))
 
-        // Configurando clique no card
-        binding.root.setOnClickListener { listener.onClick(task) }
+        binding.tvTime.text = task.time?.let {
+            task.time.toString()
+        } ?: run {
+            "-"
+        }
 
-        // Configurando menu de contexto
+        val currentDate = LocalDate.now()
+
+        task.date?.let { date ->
+            when {
+                task.completed -> binding.statusIndicator.setBackgroundResource(R.color.green_700)
+                date == null -> binding.statusIndicator.setBackgroundResource(R.color.blue_700)
+                date < currentDate -> binding.statusIndicator.setBackgroundResource(R.color.red_500)
+                date == currentDate -> binding.statusIndicator.setBackgroundResource(R.color.yellow_500)
+                else -> binding.statusIndicator.setBackgroundResource(R.color.blue_700)
+            }
+        } ?: run {
+            if (!task.completed)
+                binding.statusIndicator.setBackgroundResource(R.color.blue_700)
+            else
+                binding.statusIndicator.setBackgroundResource(R.color.green_700)
+        }
+
+        binding.root.setOnClickListener {
+            listener.onClick(task)
+        }
+
         binding.root.setOnCreateContextMenuListener { menu, _, _ ->
             menu.add(ContextCompat.getString(context, R.string.mark_as_completed))
                 .setOnMenuItemClickListener {
-                    listener.onMarkAsCompleteClick(adapterPosition, task)
-                    true
-                }
+                listener.onMarkAsCompleteClick(adapterPosition, task)
+                true
+            }
             menu.add(ContextCompat.getString(context, R.string.share))
                 .setOnMenuItemClickListener {
-                    listener.onShareClick(task)
-                    true
-                }
+                listener.onShareClick(task)
+                true
+            }
         }
     }
 }

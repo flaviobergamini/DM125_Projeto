@@ -50,6 +50,7 @@
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/blue_700"
         app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

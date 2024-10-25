@@ -11,6 +11,7 @@ class TaskService : ViewModel() {
     private val taskRepository = RetrofitService().getTaskRepository()
 
     fun save(task: Task): LiveData<ResponseDto<Task>> {
+        task.completed = false
         val taskLiveData = MutableLiveData<ResponseDto<Task>>()
 
         task.id?.let { taskId ->

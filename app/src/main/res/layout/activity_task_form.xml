@@ -7,14 +7,27 @@
     android:paddingHorizontal="16dp"
     android:paddingVertical="10dp">
 
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/create_task"
+        android:backgroundTintMode="@color/blue_200"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:boxBackgroundColor="?android:colorBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/ivIcon">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTitle"
@@ -100,6 +113,7 @@
         android:text="@string/save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilDate" />
+        app:layout_constraintTop_toBottomOf="@id/tilDate"
+        android:backgroundTint="@color/blue_700"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

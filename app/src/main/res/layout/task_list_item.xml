@@ -11,34 +11,54 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="110dp">
+
+        <View
+            android:id="@+id/statusIndicator"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textColor="@color/white"
+            android:padding="8dp"
+            android:textColor="@color/black"
             android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/statusIndicator"
             app:layout_constraintTop_toTopOf="parent"
-            tools:background="@color/blue_700"
             tools:text="@string/app_name" />
 
         <TextView
             android:id="@+id/tvDate"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:paddingVertical="2dp"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/statusIndicator"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            android:textSize="18sp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/statusIndicator"
+            app:layout_constraintTop_toBottomOf="@id/tvDate"
             tools:text="@string/app_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
-
